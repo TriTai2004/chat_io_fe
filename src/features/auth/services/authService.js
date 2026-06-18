@@ -9,6 +9,10 @@ export const me = () =>
 export const logout = () =>
     axiosClient.post("/auth/logout");
 
+export const loginGG = () =>{
+    window.window.location.href = import.meta.env.VITE_API_URL_BASE + "/oauth2/authorization/google";
+}
+
 export default {
     login,
     me,

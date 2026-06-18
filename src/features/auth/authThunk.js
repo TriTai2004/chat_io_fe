@@ -18,6 +18,20 @@ export const login = createAsyncThunk(
         }
     }
 );
+export const loginGG = createAsyncThunk(
+    "auth/loginGG",
+    async (credentials, { rejectWithValue }) => {
+        try {
+            await authService.loginGG();
+
+            const response = await authService.me();
+
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(getErrorMessage(error, "Login failed"));
+        }
+    }
+);
 
 export const getCurrentUser = createAsyncThunk(
     "auth/getCurrentUser",

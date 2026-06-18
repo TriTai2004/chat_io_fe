@@ -13,7 +13,7 @@ import {
     FaLock,
     FaShieldAlt,
 } from "react-icons/fa";
-import { login } from "../../authThunk";
+import { login, loginGG } from "../../authThunk";
 import { clearAuthError } from "../../authSlice";
 import { selectAuthError, selectAuthLoading, selectIsAuthenticated } from "../../selectors";
 import "./style.css";
@@ -104,8 +104,13 @@ const Login = () => {
         }
     };
 
-    const handleGoogleLogin = () => {
+    const handleGoogleLogin = async () => {
         setSubmitState("google");
+        dispatch(clearAuthError());
+            await dispatch(
+                loginGG()
+            ).unwrap();
+
     };
 
     return (
