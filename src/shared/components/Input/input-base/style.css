@@ -1,0 +1,103 @@
+@reference "../../../../index.css";
+
+.input-field {
+  @apply relative;
+}
+
+.input-label {
+  @apply mb-2 block text-sm font-semibold tracking-tight text-slate-700 transition-colors;
+}
+
+.input-label--error {
+  @apply text-rose-600;
+}
+
+.input-label--success {
+  @apply text-emerald-600;
+}
+
+.input-shell {
+  @apply relative;
+}
+
+.input-base {
+  @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition-all duration-200 ease-out placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-60;
+  @apply hover:border-slate-300 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10;
+}
+
+.input-base--with-left-icon {
+  @apply pl-11;
+}
+
+.input-base--with-right-icon {
+  @apply pr-11;
+}
+
+.input-variant--default {
+  @apply bg-white;
+}
+
+.input-variant--soft {
+  @apply border-transparent bg-slate-100 hover:bg-slate-200 focus:bg-white;
+}
+
+.input-variant--glass {
+  @apply border-white/20 bg-white/60 backdrop-blur-md hover:border-white/40;
+}
+
+.input-size--sm {
+  @apply py-2.5 text-sm;
+}
+
+.input-size--md {
+  @apply py-3 text-sm;
+}
+
+.input-size--lg {
+  @apply py-3.5 text-base;
+}
+
+.input-base.input-tone--success {
+  @apply border-emerald-500/60 focus:border-emerald-500 focus:ring-emerald-500/10;
+}
+
+.input-base.input-tone--success:hover {
+  @apply border-emerald-500/70;
+}
+
+.input-base.input-tone--error {
+  @apply border-rose-500/80 focus:border-rose-500 focus:ring-rose-500/10;
+}
+
+.input-base.input-tone--error:hover {
+  @apply border-rose-500;
+}
+
+.input-icon-left,
+.input-icon-right {
+  @apply pointer-events-none absolute inset-y-0 flex items-center text-slate-400;
+}
+
+.input-icon-left {
+  @apply left-4;
+}
+
+.input-icon-right {
+  @apply right-4 gap-2;
+}
+
+.input-clear-btn {
+  @apply pointer-events-auto rounded-full p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600;
+}
+
+.input-feedback {
+  @apply mt-2 text-sm leading-5 text-slate-500;
+}
+
+.input-feedback.input-feedback--error {
+  @apply text-rose-600;
+}
+
+.input-feedback.input-feedback--success {
+  @apply text-emerald-600;
+}
