@@ -1,0 +1,192 @@
+@reference "../../../../index.css";
+
+.register-page {
+  @apply relative min-h-screen overflow-hidden bg-slate-950 px-4 py-6 text-white sm:px-6 sm:py-8 lg:px-8 lg:py-10;
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.16), transparent 28%),
+    linear-gradient(135deg, #020617 0%, #0f172a 45%, #111827 100%);
+}
+
+.register-orb {
+  @apply pointer-events-none absolute rounded-full blur-3xl;
+}
+
+.register-orb--one {
+  @apply -left-24 top-8 h-64 w-64 bg-sky-500/20 sm:-left-20 sm:h-72 sm:w-72 lg:-left-28;
+}
+
+.register-orb--two {
+  @apply -bottom-12 right-0 h-72 w-72 bg-cyan-400/15 sm:h-80 sm:w-80 lg:-bottom-16;
+}
+
+.register-grid {
+  @apply relative mx-auto grid min-h-[calc(100vh-3rem)] w-full max-w-7xl items-center gap-6 sm:min-h-[calc(100vh-4rem)] sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10;
+}
+
+.register-hero {
+  @apply order-2 max-w-2xl space-y-6 rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-sky-950/20 backdrop-blur-xl sm:space-y-8 sm:rounded-[2rem] sm:p-8 lg:order-1 lg:p-10;
+}
+
+.register-badge {
+  @apply inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-400/10 px-4 py-2 text-sm font-medium text-sky-100;
+}
+
+.register-badge svg {
+  @apply h-4 w-4 text-sky-300;
+}
+
+.register-title {
+  @apply max-w-xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-6xl;
+}
+
+.register-title span {
+  @apply block bg-gradient-to-r from-sky-300 via-cyan-200 to-white bg-clip-text text-transparent;
+}
+
+.register-description {
+  @apply max-w-xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7;
+}
+
+.register-feature-list {
+  @apply grid gap-3 sm:grid-cols-2 sm:gap-4;
+}
+
+.register-feature-card {
+  @apply flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-left text-slate-200 transition duration-300 hover:-translate-y-0.5 hover:border-sky-300/30 hover:bg-white/10;
+}
+
+.register-feature-card svg {
+  @apply mt-1 h-5 w-5 shrink-0 text-sky-300;
+}
+
+.register-feature-card strong {
+  @apply block text-sm font-semibold text-white;
+}
+
+.register-feature-card p {
+  @apply mt-1 text-sm leading-6 text-slate-300;
+}
+
+.register-card {
+  @apply order-1 rounded-[1.75rem] border border-white/10 bg-white/10 p-5 shadow-2xl shadow-slate-950/30 backdrop-blur-2xl sm:rounded-[2rem] sm:p-7 lg:order-2 lg:p-8;
+}
+
+.register-card-header {
+  @apply space-y-2;
+}
+
+.register-eyebrow {
+  @apply text-sm font-semibold uppercase tracking-[0.25em] text-sky-200/80;
+}
+
+.register-card-header h2 {
+  @apply text-xl font-semibold text-white sm:text-2xl lg:text-3xl;
+}
+
+.register-card-header span {
+  @apply block text-sm leading-6 text-slate-300;
+}
+
+.register-social {
+  @apply mt-6 space-y-3 sm:mt-8;
+}
+
+.register-google {
+  @apply inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-lg shadow-black/10 transition duration-300 hover:-translate-y-0.5 hover:border-slate-200 hover:bg-slate-50 active:scale-[0.99];
+}
+
+.register-google svg {
+  @apply h-4 w-4 text-[#ea4335];
+}
+
+.register-divider {
+  @apply relative flex items-center justify-center text-xs uppercase tracking-[0.28em] text-slate-400;
+}
+
+.register-divider::before,
+.register-divider::after {
+  content: "";
+  @apply absolute top-1/2 h-px w-[42%] bg-white/10;
+}
+
+.register-divider::before {
+  @apply left-0;
+}
+
+.register-divider::after {
+  @apply right-0;
+}
+
+.register-form {
+  @apply mt-6 space-y-4 sm:mt-8 sm:space-y-5;
+}
+
+.register-input {
+  @apply border-white/10 bg-white/10 text-white placeholder:text-slate-400 hover:border-sky-300/30 focus:border-sky-400 focus:ring-sky-400/15;
+}
+
+.register-label {
+  @apply text-slate-200;
+}
+
+.register-feedback {
+  @apply text-slate-300;
+}
+
+.register-icon-button {
+  @apply inline-flex h-9 w-9 items-center justify-center rounded-full text-slate-300 transition hover:bg-white/10 hover:text-white;
+}
+
+.register-terms {
+  @apply flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-slate-300;
+}
+
+.register-terms input {
+  @apply mt-1 h-4 w-4 rounded border-white/20 bg-white/10 text-sky-500 accent-sky-500;
+}
+
+.register-link-inline {
+  @apply font-medium text-sky-200 transition hover:text-sky-100;
+}
+
+.register-terms-error {
+  @apply -mt-2 text-sm text-rose-300;
+}
+
+.register-footer {
+  @apply pt-1 text-center text-sm text-slate-300;
+}
+
+.register-footer-link {
+  @apply font-semibold text-sky-200 transition hover:text-sky-100;
+}
+
+@media (max-width: 1024px) {
+  .register-grid {
+    @apply grid-cols-1 py-4;
+  }
+
+  .register-hero {
+    @apply order-2;
+  }
+}
+
+@media (max-width: 640px) {
+  .register-page {
+    @apply px-3 py-4;
+  }
+
+  .register-card,
+  .register-hero {
+    @apply rounded-[1.5rem];
+  }
+
+  .register-title {
+    @apply text-3xl;
+  }
+
+  .register-social {
+    @apply mt-5;
+  }
+}
