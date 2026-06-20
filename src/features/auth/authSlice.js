@@ -28,6 +28,8 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(login.fulfilled, (state, action) => {
+
+                  console.log("LOGIN FULFILLED:", action.payload);
                 state.loading = false;
                 state.user = action.payload;
                 state.isAuthenticated = true;
@@ -58,6 +60,7 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(getCurrentUser.fulfilled, (state, action) => {
+
                 state.loading = false;
                 state.user = action.payload;
                 state.isAuthenticated = true;

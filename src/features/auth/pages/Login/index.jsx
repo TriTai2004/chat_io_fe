@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Input from "../../../../shared/components/Input/input-base/input";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import {
     FaArrowRight,
     FaCheckCircle,
@@ -15,7 +14,7 @@ import {
 } from "react-icons/fa";
 import { login, loginGG } from "../../authThunk";
 import { clearAuthError } from "../../authSlice";
-import { selectAuthError, selectAuthLoading, selectIsAuthenticated } from "../../selectors";
+import { selectAuthError, selectAuthLoading } from "../../selectors";
 import "./style.css";
 
 const initialForm = {
@@ -26,25 +25,23 @@ const initialForm = {
 
 const Login = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [form, setForm] = useState(initialForm);
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
     const [submitState, setSubmitState] = useState("idle");
     const authLoading = useSelector(selectAuthLoading);
     const authError = useSelector(selectAuthError);
-    const isAuthenticated = useSelector(selectIsAuthenticated);
     const loginErrorMessage = authError
         ? /401|unauthorized|invalid credentials/i.test(authError)
             ? "Invalid email or password."
             : authError
         : "";
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigate("/", { replace: true });
-        }
-    }, [isAuthenticated, navigate]);
+    // useEffect(() => {
+    //     if (isAuthenticated) {
+    //         navigate("/", { replace: true });
+    //     }
+    // }, [isAuthenticated, navigate]);
 
     const passwordIcon = useMemo(
         () => (
