@@ -16,6 +16,8 @@ import ChatMessageBubble from "../../components/ChatMessageBubble";
 import ChatPanelHeader from "../../components/ChatPanelHeader";
 import ChatScrollArea from "../../components/ChatScrollArea";
 import "./style.css";
+import { useSelector } from "react-redux";
+import { selectAuth } from "../../../auth/selectors";
 
 const conversations = [
     {
@@ -143,6 +145,7 @@ const ChatPage = () => {
     const [activePanel, setActivePanel] = useState("chat");
     const [searchQuery, setSearchQuery] = useState("");
     const [message, setMessage] = useState("");
+    const user = useSelector(selectAuth);
 
     useEffect(() => {
         const previousOverflow = document.body.style.overflow;
@@ -227,7 +230,7 @@ const ChatPage = () => {
                             <span>3 alerts</span>
                         </button>
                         <button type="button" className="rounded-full" aria-label="Open profile">
-                            <ChatAvatar size="sm" label="PT" accent="linear-gradient(135deg, #22c55e, #3b82f6)" />
+                            <ChatAvatar src={user?.imgage} size="sm" label="PT" accent="linear-gradient(135deg, #22c55e, #3b82f6)" />
                         </button>
                     </div>
                 </header>

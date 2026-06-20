@@ -31,11 +31,9 @@ const Login = () => {
     const [submitState, setSubmitState] = useState("idle");
     const authLoading = useSelector(selectAuthLoading);
     const authError = useSelector(selectAuthError);
-    const loginErrorMessage = authError
-        ? /401|unauthorized|invalid credentials/i.test(authError)
-            ? "Invalid email or password."
-            : authError
-        : "";
+    const loginErrorMessage = authError && 
+        /404|Not Found|invalid credentials/i.test(authError) ?
+        "Invalid email or password." : ""
 
     // useEffect(() => {
     //     if (isAuthenticated) {

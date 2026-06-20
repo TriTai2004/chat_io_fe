@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBars, FaTimes, FaComments } from "react-icons/fa";
 import Button from "../../../shared/components/Button/button-base";
+import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "../../auth/selectors";
 
 const navItems = [
     { label: "Home", href: "#home" },
@@ -11,7 +13,14 @@ const navItems = [
 ];
 
 const Navbar = () => {
+
+    const isAuthenticated = useSelector(selectIsAuthenticated);
+
+
+
     const [isOpen, setIsOpen] = useState(false);
+
+
 
     return (
         <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/75 backdrop-blur-xl">
@@ -37,14 +46,18 @@ const Navbar = () => {
 
                 <div className="hidden items-center gap-3 lg:flex">
                     <Button as={Link} to="/chat" variant="glass" size="sm">
-                        Chat Demo
+                        Start Chatting
                     </Button>
-                    <Button as={Link} to="/login" variant="ghost" size="sm">
-                        Login
-                    </Button>
-                    <Button as={Link} to="/login" variant="primary" size="sm" shape="pill">
-                        Sign Up
-                    </Button>
+                    {!isAuthenticated && (
+                        <>
+                            <Button as={Link} to="/login" variant="ghost" size="sm">
+                                Login
+                            </Button>
+                            <Button as={Link} to="/login" variant="primary" size="sm" shape="pill">
+                                Sign Up
+                            </Button>
+                        </>
+                    )}
                 </div>
 
                 <button

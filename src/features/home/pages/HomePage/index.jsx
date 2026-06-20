@@ -10,6 +10,9 @@ import CTASection from "../../components/CTASection";
 import Footer from "../../components/Footer";
 
 const HomePage = () => {
+
+    
+
     return (
         <div className="min-h-screen bg-slate-950 text-white">
             <Navbar />
