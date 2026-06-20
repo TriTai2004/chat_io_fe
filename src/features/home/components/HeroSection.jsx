@@ -32,7 +32,7 @@ const HeroSection = () => {
                     </div>
 
                     <div className="flex flex-col gap-4 sm:flex-row">
-                        <Button as={Link} to="/login" variant="primary" size="lg">
+                        <Button as={Link} to="/chat" variant="primary" size="lg">
                             Start Chatting
                             <FaArrowRight />
                         </Button>

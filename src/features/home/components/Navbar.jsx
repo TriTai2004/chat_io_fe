@@ -36,6 +36,9 @@ const Navbar = () => {
                 </nav>
 
                 <div className="hidden items-center gap-3 lg:flex">
+                    <Button as={Link} to="/chat" variant="glass" size="sm">
+                        Chat Demo
+                    </Button>
                     <Button as={Link} to="/login" variant="ghost" size="sm">
                         Login
                     </Button>
@@ -68,7 +71,10 @@ const Navbar = () => {
                             </a>
                         ))}
 
-                        <div className="grid grid-cols-2 gap-3 pt-2">
+                        <div className="grid grid-cols-1 gap-3 pt-2">
+                            <Button as={Link} to="/chat" variant="glass" size="md" fullWidth>
+                                Chat Demo
+                            </Button>
                             <Button as={Link} to="/login" variant="ghost" size="md" fullWidth>
                                 Login
                             </Button>
