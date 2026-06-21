@@ -1,23 +1,21 @@
 import ChatAvatar from "../ChatAvatar";
 import "./style.css";
 
-const ChatConversationItem = ({
-    name,
-    label,
-    lastMessage,
-    time,
-    unread = 0,
-    active = false,
-    online = false,
-    avatar,
-    accent,
-    onClick
-}) => {
-
-
+const ChatConversationItem = (props) => {
+    const {
+        name,
+        label,
+        lastMessage,
+        time,
+        unread = 0,
+        active = false,
+        online = false,
+        avatar,
+        accent,
+        onClick
+    } = props;
 
     return (
-        
         <article onClick={onClick} className={`chat-conversation-item-base ${active ? "is-active" : ""}`}>
             <ChatAvatar size="sm" accent={accent} online={online} label={avatar} />
 

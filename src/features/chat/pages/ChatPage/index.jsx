@@ -18,6 +18,8 @@ import ChatScrollArea from "../../components/ChatScrollArea";
 import "./style.css";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../../../auth/selectors";
+import { getConversations } from "../../services/conversationService";
+import { getChatList } from "../../services/conversation-member";
 
 const conversations = [
     {
@@ -147,6 +149,29 @@ const ChatPage = () => {
     const [message, setMessage] = useState("");
     const user = useSelector(selectAuth);
 
+    const [chatListConversation, setChatListConversation] = useState();
+
+
+    useEffect(() => {
+
+
+        const loadConversation = async () => {
+            const res = await getChatList();
+
+            setChatListConversation(res.data.data);
+        };
+
+        loadConversation();
+
+        console.log(chatListConversation);
+        
+
+    }, []);
+
+
+    console.log(user);
+
+
     useEffect(() => {
         const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = "hidden";
@@ -230,7 +255,7 @@ const ChatPage = () => {
                             <span>3 alerts</span>
                         </button>
                         <button type="button" className="rounded-full" aria-label="Open profile">
-                            <ChatAvatar src={user?.imgage} size="sm" label="PT" accent="linear-gradient(135deg, #22c55e, #3b82f6)" />
+                            <ChatAvatar src={user?.user?.avatar} size="sm" label="PT" accent="linear-gradient(135deg, #22c55e, #3b82f6)" />
                         </button>
                     </div>
                 </header>
@@ -300,11 +325,39 @@ const ChatPage = () => {
                             </div>
 
                             <ChatScrollArea className="chat-scrollbar flex min-h-0 flex-1 overflow-y-auto flex-col gap-2 px-3 py-3 lg:px-4">
-                                {filteredConversations.map((conversation) => (
+                                {chatListConversation?.map((chat) => (
                                     <ChatConversationItem
-                                        key={conversation.id}
-                                        onClick={() => setActivePanel("chat")}
-                                        {...conversation}
+                                        key={chat.conversationId}
+
+                                        name={chat.conversationName}
+
+                                        lastMessage={chat.latestMessage}
+
+                                        time={
+                                            new Date(chat.latestMessageTime)
+                                                .toLocaleTimeString([], {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit"
+                                                })
+                                        }
+
+                                        avatar={chat.avatarChat}
+
+                                        online={chat.online}
+
+                                        label={
+                                            chat.groupChat
+                                                ? "Group"
+                                                : "Conversation"
+                                        }
+
+                                        onClick={() => {
+                                            console.log(
+                                                "click conversation",
+                                                chat.conversationId
+                                            );
+                                            setActivePanel("chat")
+                                        }}
                                     />
                                 ))}
                             </ChatScrollArea>
