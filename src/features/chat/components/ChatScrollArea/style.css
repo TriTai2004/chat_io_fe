@@ -3,6 +3,7 @@
     overflow: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(37, 99, 235, 0.5) rgba(226, 232, 240, 0.9);
+    scroll-behavior: smooth;
 }
 
 .chat-scroll-area-base::-webkit-scrollbar {

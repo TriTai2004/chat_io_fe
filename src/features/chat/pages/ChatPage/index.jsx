@@ -18,8 +18,8 @@ import ChatScrollArea from "../../components/ChatScrollArea";
 import "./style.css";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../../../auth/selectors";
-import { getConversations } from "../../services/conversationService";
-import { getChatList } from "../../services/conversation-member";
+import { getChatList } from "../../services/conversation-memberService";
+import { getChatMessagesByConversation } from "../../services/messageService";
 
 const conversations = [
     {
@@ -84,56 +84,6 @@ const conversations = [
     },
 ];
 
-const messages = [
-    {
-        id: 1,
-        author: "Mika",
-        role: "Support Lead",
-        time: "09:18",
-        text: "Morning team, I mapped the new chat layout into 3 layers: list, thread, and details.",
-        mine: false,
-    },
-    {
-        id: 2,
-        author: "You",
-        role: "Product",
-        time: "09:19",
-        text: "Nice. Let's make the desktop view feel like Telegram, but with a softer premium surface.",
-        mine: true,
-    },
-    {
-        id: 3,
-        author: "Mika",
-        role: "Support Lead",
-        time: "09:21",
-        text: "Agreed. I also added compact switching for tablet and mobile, so the layout stays usable.",
-        mine: false,
-    },
-    {
-        id: 4,
-        author: "You",
-        role: "Product",
-        time: "09:24",
-        text: "Perfect. Add a composer with quick actions, plus a clear info panel for files and members.",
-        mine: true,
-    },
-    {
-        id: 5,
-        author: "Mika",
-        role: "Support Lead",
-        time: "09:26",
-        text: "Done. I'm also making the message bubbles more polished than a standard social app.",
-        mine: false,
-    },
-    {
-        id: 6,
-        author: "You",
-        role: "Product",
-        time: "09:32",
-        text: "Great, let's ensure the inner panels scroll independently so the page itself stays fixed.",
-        mine: true,
-    },
-];
 
 const quickActions = [
     { icon: <FaPaperclip />, label: "Attach" },
@@ -146,10 +96,14 @@ const ChatPage = () => {
     const [compactMode, setCompactMode] = useState(false);
     const [activePanel, setActivePanel] = useState("chat");
     const [searchQuery, setSearchQuery] = useState("");
+    const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
+    const [pageMessage, setPageMessage] = useState(0);
     const user = useSelector(selectAuth);
 
     const [chatListConversation, setChatListConversation] = useState();
+    const [currentConversationId, setCurrentConversationId] = useState();
+    const [conversationId, setConversationId] = useState();
 
 
     useEffect(() => {
@@ -159,14 +113,51 @@ const ChatPage = () => {
             const res = await getChatList();
 
             setChatListConversation(res.data.data);
+            console.log(res.data.data);
+
         };
 
         loadConversation();
 
-        console.log(chatListConversation);
-        
+
 
     }, []);
+
+    const fetchMessages = async (conversationId) => {
+
+        setConversationId(conversationId);
+
+        try {
+            const res = await getChatMessagesByConversation(conversationId, { page: pageMessage, size: 10 });
+            const oldMessages = res.data.data.reverse();
+
+            console.log(oldMessages);
+
+            setMessages(prev => {
+                const ids = new Set(prev.map(m => m.id));
+
+                const unique = oldMessages.filter(
+                    m => !ids.has(m.id)
+                );
+
+                return [
+                    ...unique,
+                    ...prev
+                ];
+            });
+
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
+
+    const loadOlderMessages = () => {
+        setPageMessage(pageMessage + 1);
+
+        fetchMessages(conversationId);
+
+    }
 
 
     console.log(user);
@@ -202,20 +193,6 @@ const ChatPage = () => {
         []
     );
 
-    const filteredConversations = useMemo(() => {
-        const query = searchQuery.trim().toLowerCase();
-
-        if (!query) {
-            return conversations;
-        }
-
-        return conversations.filter((conversation) => {
-            return [conversation.name, conversation.label, conversation.lastMessage]
-                .join(" ")
-                .toLowerCase()
-                .includes(query);
-        });
-    }, [searchQuery]);
 
     return (
         <main className="relative h-dvh overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.16),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(34,197,94,0.12),_transparent_26%),linear-gradient(180deg,_#eff6ff_0%,_#f8fafc_44%,_#eef6ff_100%)] text-slate-900">
@@ -324,7 +301,9 @@ const ChatPage = () => {
                                 </div>
                             </div>
 
-                            <ChatScrollArea className="chat-scrollbar flex min-h-0 flex-1 overflow-y-auto flex-col gap-2 px-3 py-3 lg:px-4">
+                            <ChatScrollArea 
+                            
+                                className="chat-scrollbar flex min-h-0 flex-1 overflow-y-auto flex-col gap-2 px-3 py-3 lg:px-4">
                                 {chatListConversation?.map((chat) => (
                                     <ChatConversationItem
                                         key={chat.conversationId}
@@ -351,12 +330,9 @@ const ChatPage = () => {
                                                 : "Conversation"
                                         }
 
-                                        onClick={() => {
-                                            console.log(
-                                                "click conversation",
-                                                chat.conversationId
-                                            );
-                                            setActivePanel("chat")
+                                        onClick={async () => {
+                                            await fetchMessages(chat.conversationId);
+                                            setActivePanel("chat");
                                         }}
                                     />
                                 ))}
@@ -386,30 +362,46 @@ const ChatPage = () => {
                                     ) : null}
                                     <ChatAvatar
                                         size="sm"
-                                        label={activeConversation.avatar}
-                                        accent={activeConversation.accent}
-                                        online={activeConversation.online}
+                                        label={messages[0]?.avatar}
                                     />
                                     <div className="min-w-0">
                                         <div className="flex flex-wrap items-center gap-2">
                                             <h2 className="m-0 text-base font-bold text-slate-900">
-                                                {activeConversation.name}
+                                                {messages[0]?.fullname}
                                             </h2>
                                             <span className="rounded-full border border-sky-100 bg-sky-50 px-2 py-0.5 text-[11px] font-medium text-sky-700">
                                                 {activeConversation.label}
                                             </span>
                                         </div>
-                                        <p className="m-0 mt-1 text-sm text-slate-500">
+                                        {/* <p className="m-0 mt-1 text-sm text-slate-500">
                                             18 people online · last seen just now
-                                        </p>
+                                        </p> */}
                                     </div>
                                 </div>
                             </div>
 
-                            <ChatScrollArea className="chat-scrollbar flex min-h-0 flex-1 overflow-y-auto px-3 py-3 lg:px-4 max-[640px]:px-2 max-[640px]:py-2">
+                            <ChatScrollArea
+                                initialAnchor="bottom"
+                                onReachTop={loadOlderMessages}
+                                dataLength={messages.length}
+                                className="chat-scrollbar flex min-h-0 flex-1 overflow-y-auto px-3 py-3 lg:px-4 max-[640px]:px-2 max-[640px]:py-2">
+                                
                                 <div className="flex min-h-0 flex-1 flex-col gap-3">
-                                    {messages.map((item) => (
-                                        <ChatMessageBubble key={item.id} {...item} />
+                                    {messages?.map((item) => (
+                                        <ChatMessageBubble key={item.id}
+                                            text={item?.content}
+                                            author={item?.fullname}
+                                            time={
+                                                new Date(item.createdAt)
+                                                    .toLocaleTimeString([], {
+                                                        hour: "2-digit",
+                                                        minute: "2-digit"
+                                                    })
+                                            }
+
+                                            mine={user?.user?.id == item?.senderId ? true : false}
+
+                                        />
                                     ))}
                                 </div>
                             </ChatScrollArea>

@@ -1,4 +1,4 @@
-import axiosClient from './../../../services/api/axiosClient';
+import axiosClient from '../../../services/api/axiosClient';
 
 export const getConversationMembers = (params) => 
     axiosClient.get("/conversation-members", { params });

@@ -1,6 +1,7 @@
 ﻿.chat-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: rgba(37, 99, 235, 0.42) rgba(226, 232, 240, 0.95);
+    
 }
 
 .chat-scrollbar::-webkit-scrollbar {

@@ -1,7 +1,8 @@
+import { memo } from "react";
 import ChatAvatar from "../ChatAvatar";
 import "./style.css";
 
-const ChatMessageBubble = ({ author, time, text, mine = false }) => {
+const ChatMessageBubble = memo(({ author, time, text, mine = false }) => {
     return (
         <article className={`chat-message-bubble-base ${mine ? "is-mine" : ""}`}>
             {!mine ? (
@@ -22,6 +23,6 @@ const ChatMessageBubble = ({ author, time, text, mine = false }) => {
             </div>
         </article>
     );
-};
+});
 
 export default ChatMessageBubble;
