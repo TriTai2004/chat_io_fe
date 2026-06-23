@@ -46,11 +46,11 @@ class SocketService {
         this.client.activate();
     }
 
-    send(destination, payload) {
+    send(payload) {
         if (!this.connected) return;
 
         this.client.publish({
-            destination,
+            destination: "/app/chat.send",
             body: JSON.stringify(payload),
         });
     }

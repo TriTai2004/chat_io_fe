@@ -8,7 +8,7 @@ const ChatMessageBubble = memo(({ author, time, text, mine = false }) => {
             {!mine ? (
                 <ChatAvatar
                     size="sm"
-                    label={author.slice(0, 1)}
+                    // label={author.slice(0, 1)}
                     accent="linear-gradient(135deg, #38bdf8, #2563eb)"
                     className="chat-message-bubble-base__avatar"
                 />

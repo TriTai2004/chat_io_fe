@@ -1,14 +1,11 @@
-﻿import { useEffect, useMemo, useState } from "react";
+﻿import { useState } from "react";
 import {
     FaBell,
-    FaImage,
-    FaMicrophone,
     FaPaperclip,
     FaPaperPlane,
     FaSearch,
     FaSmile,
     FaUsers,
-    FaVideo,
 } from "react-icons/fa";
 import ChatAvatar from "../../components/ChatAvatar";
 import ChatConversationItem from "../../components/ChatConversationItem";
@@ -18,181 +15,47 @@ import ChatScrollArea from "../../components/ChatScrollArea";
 import "./style.css";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../../../auth/selectors";
-import { getChatList } from "../../services/conversation-memberService";
-import { getChatMessagesByConversation } from "../../services/messageService";
+import getDateLabel from './../../../../shared/utils/formatDataLabel';
+import { useChatMessages } from "../../hooks/useChatMessages";
+import { useSocketMessages } from "../../hooks/UseSocketMessages";
+import { useConversationList } from "../../hooks/useConversationList";
+import { useCompactMode, useLockBodyScroll } from "../../hooks/UseCompactMode";
 
-const conversations = [
-    {
-        id: 1,
-        name: "Design Sprint",
-        label: "Team",
-        lastMessage: "The new message composer feels much smoother.",
-        time: "09:42",
-        unread: 3,
-        active: true,
-        online: true,
-        avatar: "DS",
-        accent: "linear-gradient(135deg, #38bdf8, #2563eb)",
-    },
-    {
-        id: 2,
-        name: "Product Guild",
-        label: "Channel",
-        lastMessage: "We should ship the announcement draft this afternoon.",
-        time: "08:18",
-        unread: 0,
-        active: false,
-        online: false,
-        avatar: "PG",
-        accent: "linear-gradient(135deg, #22c55e, #14b8a6)",
-    },
-    {
-        id: 3,
-        name: "Anh Khoa",
-        label: "Direct",
-        lastMessage: "I pinned the updated onboarding flow.",
-        time: "Yesterday",
-        unread: 1,
-        active: false,
-        online: true,
-        avatar: "AK",
-        accent: "linear-gradient(135deg, #f472b6, #8b5cf6)",
-    },
-    {
-        id: 4,
-        name: "Marketing Studio",
-        label: "Room",
-        lastMessage: "Can we rework the hero animation timing?",
-        time: "Mon",
-        unread: 0,
-        active: false,
-        online: false,
-        avatar: "MS",
-        accent: "linear-gradient(135deg, #f59e0b, #ef4444)",
-    },
-    {
-        id: 5,
-        name: "Marketing Studio",
-        label: "Room",
-        lastMessage: "Can we rework the hero animation timing?",
-        time: "Mon",
-        unread: 0,
-        active: false,
-        online: false,
-        avatar: "MS",
-        accent: "linear-gradient(135deg, #f59e0b, #ef4444)",
-    },
-];
 
 
 const quickActions = [
-    { icon: <FaPaperclip />, label: "Attach" },
-    { icon: <FaImage />, label: "Photo" },
-    { icon: <FaMicrophone />, label: "Voice" },
-    { icon: <FaVideo />, label: "Clip" },
+    // { icon: <FaPaperclip />, label: "Attach" },
+    // { icon: <FaImage />, label: "Photo" },
+    // { icon: <FaMicrophone />, label: "Voice" },
+    // { icon: <FaVideo />, label: "Clip" },
 ];
 
 const ChatPage = () => {
-    const [compactMode, setCompactMode] = useState(false);
-    const [activePanel, setActivePanel] = useState("chat");
     const [searchQuery, setSearchQuery] = useState("");
-    const [messages, setMessages] = useState([]);
-    const [message, setMessage] = useState("");
-    const [pageMessage, setPageMessage] = useState(0);
     const user = useSelector(selectAuth);
 
-    const [chatListConversation, setChatListConversation] = useState();
-    const [currentConversationId, setCurrentConversationId] = useState();
-    const [conversationId, setConversationId] = useState();
+    const {
+        messages,
+        message,
+        setMessage,
+        openConversation,
+        loadOlderMessages,
+        appendIncomingMessage,
+        sendMessage,
+    } = useChatMessages(user?.user?.id);
+
+    const { chatList, upsertLatestMessage} = useConversationList();
+
+    const { activePanel, compactMode, setActivePanel } = useCompactMode();
+
+    useLockBodyScroll();
 
 
-    useEffect(() => {
-
-
-        const loadConversation = async () => {
-            const res = await getChatList();
-
-            setChatListConversation(res.data.data);
-            console.log(res.data.data);
-
-        };
-
-        loadConversation();
-
-
-
-    }, []);
-
-    const fetchMessages = async (conversationId) => {
-
-        setConversationId(conversationId);
-
-        try {
-            const res = await getChatMessagesByConversation(conversationId, { page: pageMessage, size: 10 });
-            const oldMessages = res.data.data.reverse();
-
-            console.log(oldMessages);
-
-            setMessages(prev => {
-                const ids = new Set(prev.map(m => m.id));
-
-                const unique = oldMessages.filter(
-                    m => !ids.has(m.id)
-                );
-
-                return [
-                    ...unique,
-                    ...prev
-                ];
-            });
-
-        } catch (error) {
-            console.error(error);
-        }
-
-    }
-
-    const loadOlderMessages = () => {
-        setPageMessage(pageMessage + 1);
-
-        fetchMessages(conversationId);
-
-    }
-
-
-    console.log(user);
-
-
-    useEffect(() => {
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
-
-        return () => {
-            document.body.style.overflow = previousOverflow;
-        };
-    }, []);
-
-    useEffect(() => {
-        const media = window.matchMedia("(max-width: 1100px)");
-
-        const syncMode = () => {
-            setCompactMode(media.matches);
-            if (!media.matches) {
-                setActivePanel("chat");
-            }
-        };
-
-        syncMode();
-        media.addEventListener("change", syncMode);
-
-        return () => media.removeEventListener("change", syncMode);
-    }, []);
-
-    const activeConversation = useMemo(
-        () => conversations.find((conversation) => conversation.active) ?? conversations[0],
-        []
-    );
-
+    useSocketMessages((data) => {
+        appendIncomingMessage(data);
+        upsertLatestMessage(data);
+    });
+    
 
     return (
         <main className="relative h-dvh overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.16),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(34,197,94,0.12),_transparent_26%),linear-gradient(180deg,_#eff6ff_0%,_#f8fafc_44%,_#eef6ff_100%)] text-slate-900">
@@ -301,10 +164,10 @@ const ChatPage = () => {
                                 </div>
                             </div>
 
-                            <ChatScrollArea 
-                            
+                            <ChatScrollArea
+
                                 className="chat-scrollbar flex min-h-0 flex-1 overflow-y-auto flex-col gap-2 px-3 py-3 lg:px-4">
-                                {chatListConversation?.map((chat) => (
+                                {[...chatList.values() || []]?.map((chat) => (
                                     <ChatConversationItem
                                         key={chat.conversationId}
 
@@ -331,7 +194,7 @@ const ChatPage = () => {
                                         }
 
                                         onClick={async () => {
-                                            await fetchMessages(chat.conversationId);
+                                            openConversation(chat.conversationId);
                                             setActivePanel("chat");
                                         }}
                                     />
@@ -369,9 +232,9 @@ const ChatPage = () => {
                                             <h2 className="m-0 text-base font-bold text-slate-900">
                                                 {messages[0]?.fullname}
                                             </h2>
-                                            <span className="rounded-full border border-sky-100 bg-sky-50 px-2 py-0.5 text-[11px] font-medium text-sky-700">
+                                            {/* <span className="rounded-full border border-sky-100 bg-sky-50 px-2 py-0.5 text-[11px] font-medium text-sky-700">
                                                 {activeConversation.label}
-                                            </span>
+                                            </span> */}
                                         </div>
                                         {/* <p className="m-0 mt-1 text-sm text-slate-500">
                                             18 people online · last seen just now
@@ -384,25 +247,45 @@ const ChatPage = () => {
                                 initialAnchor="bottom"
                                 onReachTop={loadOlderMessages}
                                 dataLength={messages.length}
-                                className="chat-scrollbar flex min-h-0 flex-1 overflow-y-auto px-3 py-3 lg:px-4 max-[640px]:px-2 max-[640px]:py-2">
-                                
+                                className="chat-scrollbar flex min-h-0 flex-1 overflow-y-auto px-3 py-3 lg:px-4 max-[640px]:px-2 max-[640px]:py-2"
+                            >
                                 <div className="flex min-h-0 flex-1 flex-col gap-3">
-                                    {messages?.map((item) => (
-                                        <ChatMessageBubble key={item.id}
-                                            text={item?.content}
-                                            author={item?.fullname}
-                                            time={
-                                                new Date(item.createdAt)
-                                                    .toLocaleTimeString([], {
-                                                        hour: "2-digit",
-                                                        minute: "2-digit"
-                                                    })
-                                            }
 
-                                            mine={user?.user?.id == item?.senderId ? true : false}
+                                    {messages?.map((item, index) => {
 
-                                        />
-                                    ))}
+                                        const currentDate = getDateLabel(item.createdAt);
+
+                                        const previousDate =
+                                            index > 0
+                                                ? getDateLabel(messages[index - 1].createdAt)
+                                                : null;
+
+                                        return (
+                                            <div key={item.id}>
+
+                                                {currentDate !== previousDate && (
+                                                    <div className="my-3 text-center text-xs text-gray-500">
+                                                        {currentDate}
+                                                    </div>
+                                                )}
+
+                                                <ChatMessageBubble
+                                                    text={item?.content}
+                                                    author={item?.fullname}
+                                                    time={
+                                                        new Date(item.createdAt)
+                                                            .toLocaleTimeString([], {
+                                                                hour: "2-digit",
+                                                                minute: "2-digit"
+                                                            })
+                                                    }
+                                                    mine={user?.user?.id == item?.senderId}
+                                                />
+
+                                            </div>
+                                        );
+                                    })}
+
                                 </div>
                             </ChatScrollArea>
 
@@ -420,7 +303,11 @@ const ChatPage = () => {
                                     ))}
                                 </div>
 
-                                <div className="grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-[1.25rem] border border-sky-100 bg-slate-50 p-2 shadow-sm max-[640px]:grid-cols-[auto_1fr_auto] max-[640px]:gap-1.5">
+                                <form
+
+                                    onSubmit={async (e) => await sendMessage(e)}
+
+                                    className="grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-[1.25rem] border border-sky-100 bg-slate-50 p-2 shadow-sm max-[640px]:grid-cols-[auto_1fr_auto] max-[640px]:gap-1.5">
                                     <button
                                         type="button"
                                         className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sky-100 bg-white text-sky-600 transition hover:-translate-y-0.5 hover:bg-sky-50 max-[640px]:h-9 max-[640px]:w-9"
@@ -445,14 +332,19 @@ const ChatPage = () => {
                                     />
 
                                     <button
-                                        type="button"
-                                        className="inline-flex h-11 items-center gap-2 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_18px_42px_rgba(37,99,235,0.22)] transition hover:-translate-y-0.5 max-[640px]:h-10 max-[640px]:px-3"
+                                        type="submit"
+                                        className="inline-flex h-11 items-center gap-2 rounded-2xl bg-gradient-to-r
+                                         from-sky-500 to-blue-600 px-4 py-2.5 text-sm font-semibold 
+                                         text-white shadow-[0_18px_42px_rgba(37,99,235,0.22)] 
+                                         transition hover:-translate-y-0.5 max-[640px]:h-10 max-[640px]:px-3"
+                                        disabled={!message.trim()}
                                         aria-label="Send message"
+
                                     >
                                         <FaPaperPlane />
                                         <span>Send</span>
                                     </button>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </section>
