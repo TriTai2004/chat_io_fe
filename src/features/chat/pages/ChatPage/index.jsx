@@ -277,7 +277,7 @@ const ChatPage = () => {
                                                                 minute: "2-digit"
                                                             })
                                                     }
-                                                    mine={user?.user?.id == item?.senderId}
+                                                    mine={user?.id == item?.senderId}
                                                 />
 
                                             </div>
