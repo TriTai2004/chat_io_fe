@@ -1,112 +1,31 @@
-import { useMemo, useState } from "react";
 import Input from "../../../../shared/components/Input/input-base/input";
-import { useDispatch, useSelector } from "react-redux";
-import {
-    FaArrowRight,
-    FaCheckCircle,
-    FaCommentDots,
-    FaEnvelope,
-    FaEye,
-    FaEyeSlash,
-    FaGoogle,
-    FaLock,
-    FaShieldAlt,
-} from "react-icons/fa";
-import { login, loginGG } from "../../authThunk";
-import { clearAuthError } from "../../authSlice";
-import { selectAuthError, selectAuthLoading } from "../../selectors";
+import { useLogin } from "../../hooks/UseLogin.jsx";
 import "./style.css";
+import { FaArrowRight, FaCheckCircle, FaCommentDots, FaEnvelope, FaGoogle, FaLock, FaShieldAlt } from "react-icons/fa";
 
-const initialForm = {
-    email: "",
-    password: "",
-    remember: true,
-};
+
 
 const Login = () => {
-    const dispatch = useDispatch();
-    const [form, setForm] = useState(initialForm);
-    const [showPassword, setShowPassword] = useState(false);
-    const [errors, setErrors] = useState({});
-    const [submitState, setSubmitState] = useState("idle");
-    const authLoading = useSelector(selectAuthLoading);
-    const authError = useSelector(selectAuthError);
-    const loginErrorMessage = authError && 
-        /404|Not Found|invalid credentials/i.test(authError) ?
-        "Invalid email or password." : ""
 
-    // useEffect(() => {
-    //     if (isAuthenticated) {
-    //         navigate("/", { replace: true });
-    //     }
-    // }, [isAuthenticated, navigate]);
+    const {
+        form,
+        errors,
 
-    const passwordIcon = useMemo(
-        () => (
-            <button
-                type="button"
-                onClick={() => setShowPassword((current) => !current)}
-                className="login-icon-button"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </button>
-        ),
-        [showPassword]
-    );
+        authLoading,
+        loginErrorMessage,
 
-    const handleChange = (field) => (value) => {
-        setForm((current) => ({ ...current, [field]: value }));
-        setErrors((current) => ({ ...current, [field]: "" }));
-    };
+        showPassword,
+        submitState,
 
-    const validate = () => {
-        const nextErrors = {};
+        handleChange,
+        handleSubmit,
+        handleGoogleLogin,
 
-        if (!form.email.trim()) {
-            nextErrors.email = "Please enter your email.";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-            nextErrors.email = "Email format is invalid.";
-        }
+        passwordIcon
 
-        if (!form.password) {
-            nextErrors.password = "Please enter your password.";
-        } else if (form.password.length < 6) {
-            nextErrors.password = "Password must be at least 8 characters.";
-        }
+    } = useLogin();
 
-        setErrors(nextErrors);
-        return Object.keys(nextErrors).length === 0;
-    };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        if (!validate()) {
-            return;
-        }
-
-        try {
-            dispatch(clearAuthError());
-            await dispatch(
-                login({
-                    email: form.email,
-                    password: form.password,
-                })
-            ).unwrap();
-        } catch {
-            // Error state is already handled by Redux and displayed below.
-        }
-    };
-
-    const handleGoogleLogin = async () => {
-        setSubmitState("google");
-        dispatch(clearAuthError());
-            await dispatch(
-                loginGG()
-            ).unwrap();
-
-    };
 
     return (
         <div className="login-page">
@@ -214,7 +133,7 @@ const Login = () => {
                         />
 
                         <div className="login-meta">
-                            <label className="login-remember">
+                            {/* <label className="login-remember">
                                 <input
                                     type="checkbox"
                                     checked={form.remember}
@@ -226,7 +145,7 @@ const Login = () => {
                                     }
                                 />
                                 <span>Remember me</span>
-                            </label>
+                            </label> */}
 
                             <button type="button" className="login-link">
                                 Forgot password?
