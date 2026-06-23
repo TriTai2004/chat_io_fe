@@ -13,14 +13,12 @@ import ChatMessageBubble from "../../components/ChatMessageBubble";
 import ChatPanelHeader from "../../components/ChatPanelHeader";
 import ChatScrollArea from "../../components/ChatScrollArea";
 import "./style.css";
-import { useSelector } from "react-redux";
-import { selectAuth } from "../../../auth/selectors";
 import getDateLabel from './../../../../shared/utils/formatDataLabel';
 import { useChatMessages } from "../../hooks/useChatMessages";
 import { useSocketMessages } from "../../hooks/UseSocketMessages";
 import { useConversationList } from "../../hooks/useConversationList";
 import { useCompactMode, useLockBodyScroll } from "../../hooks/UseCompactMode";
-
+import { useSelectUser } from "../../../../shared/hooks/UseSelectAuth";
 
 
 const quickActions = [
@@ -32,7 +30,7 @@ const quickActions = [
 
 const ChatPage = () => {
     const [searchQuery, setSearchQuery] = useState("");
-    const user = useSelector(selectAuth);
+    const { user } = useSelectUser();
 
     const {
         messages,
@@ -42,7 +40,7 @@ const ChatPage = () => {
         loadOlderMessages,
         appendIncomingMessage,
         sendMessage,
-    } = useChatMessages(user?.user?.id);
+    } = useChatMessages(user?.id);
 
     const { chatList, upsertLatestMessage} = useConversationList();
 
