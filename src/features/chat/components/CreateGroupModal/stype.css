@@ -1,0 +1,346 @@
+@reference "../../../../index.css";
+
+.create-group-overlay {
+
+    @apply fixed inset-0 z-50 flex items-center justify-center
+    bg-slate-900/30 px-4 py-4 backdrop-blur-md;
+
+    animation: overlayShow .2s ease-out;
+
+}
+.create-group-modal {
+
+    @apply w-full max-w-md
+    rounded-[2rem]
+    border border-slate-200
+    bg-white
+    shadow-2xl
+    shadow-slate-300/40;
+
+    animation: modalShow .25s ease-out;
+
+}
+/* HEADER */
+
+.create-group-header {
+
+    @apply flex items-center justify-between
+    border-b border-slate-200
+    p-6;
+
+}
+
+.create-group-eyebrow {
+
+    @apply text-xs uppercase tracking-[0.25em]
+    text-sky-500;
+
+}
+
+.create-group-header h2 {
+
+    @apply mt-1 text-2xl font-semibold text-slate-900;
+
+}
+
+
+.create-group-close {
+
+    @apply flex h-9 w-9 items-center justify-center
+    rounded-full
+    text-slate-500
+    transition
+    hover:bg-slate-100
+    hover:text-slate-900;
+
+}
+
+/* BODY */
+
+
+.create-group-body {
+
+    @apply space-y-4 p-6;
+
+}
+
+/* AVATAR */
+
+
+.group-avatar {
+
+    @apply mx-auto flex h-24 w-24 cursor-pointer
+    items-center justify-center
+    rounded-full
+    border border-slate-200
+    bg-slate-50
+    text-sky-500
+    overflow-hidden
+    transition
+    hover:border-sky-400;
+
+}
+.group-avatar img {
+
+    @apply h-full w-full object-cover;
+
+}
+
+/* INPUT */
+
+.group-input,
+.member-search {
+
+    @apply flex w-full items-center gap-3
+    rounded-2xl
+    border border-slate-200
+    bg-slate-50
+    px-4 py-3
+    text-slate-900
+    outline-none
+    transition
+    focus-within:border-sky-400
+    focus-within:bg-white;
+
+}
+.group-input {
+
+    @apply h-12;
+
+}
+
+
+.group-input::placeholder,
+.member-search input::placeholder {
+
+    @apply text-slate-400;
+
+}
+
+.member-search svg {
+
+    @apply text-slate-400;
+
+}
+
+.member-search input {
+
+    @apply min-w-0 flex-1
+    bg-transparent
+    text-sm
+    text-slate-900
+    outline-none;
+
+}
+
+/* MEMBER LIST */
+
+.member-list {
+
+    @apply max-h-60
+    space-y-2
+    overflow-y-auto
+    pr-1;
+
+}
+
+.member-item {
+
+    @apply flex cursor-pointer
+    items-center gap-3
+    rounded-2xl
+    border border-transparent
+    p-3
+    transition
+    hover:bg-slate-50;
+
+}
+
+.member-active {
+
+    @apply border-sky-200
+    bg-sky-50;
+
+}
+
+.member-item img {
+
+    @apply h-11 w-11
+    shrink-0
+    rounded-full
+    object-cover;
+
+}
+
+.member-info {
+
+    @apply min-w-0 flex-1;
+
+}
+
+.member-info strong {
+
+    @apply block truncate
+    text-sm font-medium
+    text-slate-900;
+
+}
+
+.member-info span {
+
+    @apply text-xs text-slate-500;
+
+}
+
+.member-check {
+
+    @apply flex h-6 w-6
+    shrink-0
+    items-center justify-center
+    rounded-full
+    bg-sky-500
+    text-xs
+    text-white;
+
+}
+
+/* FOOTER */
+
+.create-group-footer {
+
+    @apply flex justify-end gap-3
+    border-t border-slate-200
+    p-6;
+
+}
+
+/* TABLET */
+
+@media (max-width:768px) {
+
+    .create-group-modal {
+
+        @apply max-w-lg;
+
+    }
+
+    .create-group-body {
+
+        @apply p-5;
+
+    }
+    .member-list {
+
+        @apply max-h-72;
+
+    }
+
+}
+
+/* MOBILE */
+
+@media (max-width:640px) {
+
+
+    .create-group-overlay {
+
+        @apply items-center px-3;
+
+    }
+    .create-group-modal {
+
+        @apply max-w-none
+        rounded-[1.5rem];
+
+        max-height:90vh;
+        overflow-y:auto;
+
+    }
+    .create-group-header {
+
+        @apply p-4;
+
+    }
+
+    .create-group-header h2 {
+
+        @apply text-xl;
+
+    }
+    .create-group-body {
+
+        @apply p-4;
+
+    }
+    .group-avatar {
+
+        @apply h-20 w-20;
+
+    }
+    .member-list {
+
+        @apply max-h-[35vh];
+
+    }
+    .create-group-footer {
+
+        @apply flex-col p-4;
+
+    }
+    .create-group-footer button {
+
+        @apply w-full;
+
+    }
+
+}
+
+/* SMALL MOBILE */
+
+@media (max-width:400px) {
+
+    .create-group-header h2 {
+
+        @apply text-lg;
+
+    }
+
+    .member-item {
+
+        @apply p-2;
+
+    }
+
+}
+
+/* ANIMATION */
+
+@keyframes overlayShow {
+
+    from {
+        opacity:0;
+    }
+
+
+    to {
+        opacity:1;
+    }
+
+}
+
+@keyframes modalShow {
+
+    from {
+
+        opacity:0;
+        transform:translateY(20px) scale(.96);
+
+    }
+    to {
+
+        opacity:1;
+        transform:translateY(0) scale(1);
+
+    }
+
+}

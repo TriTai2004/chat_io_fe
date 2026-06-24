@@ -19,6 +19,8 @@ import { useSocketMessages } from "../../hooks/UseSocketMessages";
 import { useConversationList } from "../../hooks/useConversationList";
 import { useCompactMode, useLockBodyScroll } from "../../hooks/UseCompactMode";
 import { useSelectUser } from "../../../../shared/hooks/UseSelectAuth";
+import CreateGroupModal from "../../components/CreateGroupModal";
+import ChatHeader from "../../components/HeaderPage";
 
 
 const quickActions = [
@@ -54,6 +56,10 @@ const ChatPage = () => {
         upsertLatestMessage(data);
     });
     
+    const [openCreate,setOpenCreate] = useState(false);
+
+
+
 
     return (
         <main className="relative h-dvh overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.16),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(34,197,94,0.12),_transparent_26%),linear-gradient(180deg,_#eff6ff_0%,_#f8fafc_44%,_#eef6ff_100%)] text-slate-900">
@@ -61,42 +67,15 @@ const ChatPage = () => {
             <div className="pointer-events-none absolute right-[-5rem] top-24 h-72 w-72 rounded-full bg-emerald-300/15 blur-3xl" />
             <div className="pointer-events-none absolute bottom-[-6rem] left-1/3 h-[28rem] w-[28rem] rounded-full bg-cyan-300/10 blur-3xl" />
 
+            <CreateGroupModal
+                open={openCreate}
+                onClose={()=>setOpenCreate(false)}
+                onSubmit={(data)=>{
+                    console.log(data);
+                }}
+            />
             <section className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-[1600px] flex-col gap-4 px-3 py-3 sm:px-4 sm:py-4 lg:px-5 lg:py-5">
-                <header className="flex flex-col gap-3 rounded-[1.35rem] border border-sky-100/80 bg-white/90 p-2.5 shadow-[0_16px_40px_rgba(15,23,42,0.06)] backdrop-blur-md lg:flex-row lg:items-center lg:gap-4 lg:p-4">
-                    <div className="flex min-w-0 items-center gap-3">
-                        <ChatAvatar size="sm" accent="linear-gradient(135deg, #38bdf8, #2563eb)">
-                            <FaUsers />
-                        </ChatAvatar>
-                        <div className="min-w-0">
-                            <p className="m-0 text-sm font-bold text-slate-900">Chatio</p>
-                            <span className="block text-[11px] text-slate-500">
-                                Fast, friendly, and built for nonstop chat
-                            </span>
-                        </div>
-                    </div>
-
-                    <label className="hidden min-w-0 flex-1 items-center gap-2 rounded-full border border-sky-100 bg-slate-50 px-3 py-2 text-slate-500 sm:flex">
-                        <FaSearch className="shrink-0" />
-                        <input
-                            type="search"
-                            placeholder="Search messages, people, or files"
-                            className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
-                        />
-                    </label>
-
-                    <div className="flex items-center gap-2 self-start lg:self-auto">
-                        <button
-                            type="button"
-                            className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-gradient-to-r from-sky-50 to-white px-3 py-2 text-xs font-semibold text-sky-700 shadow-sm"
-                        >
-                            <FaBell />
-                            <span>3 alerts</span>
-                        </button>
-                        <button type="button" className="rounded-full" aria-label="Open profile">
-                            <ChatAvatar src={user?.user?.avatar} size="sm" label="PT" accent="linear-gradient(135deg, #22c55e, #3b82f6)" />
-                        </button>
-                    </div>
-                </header>
+                <ChatHeader/>
 
 
                 <div className="grid min-h-0 flex-1 gap-3 overflow-hidden lg:grid-cols-[minmax(240px,0.72fr)_minmax(0,1.8fr)] max-[640px]:gap-2">
@@ -127,6 +106,7 @@ const ChatPage = () => {
 
                                     <button
                                         type="button"
+                                        onClick={() => setOpenCreate(true)}
                                         className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full bg-sky-500 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-sky-600 sm:w-auto"
                                     >
                                         <FaUsers />
